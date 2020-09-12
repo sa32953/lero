@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 
 # Defining Solving Parameters
 
-alpha = 0.01
-error = 10 ** -4
+alpha = 0.005
+acc = 10 ** -4
 
 
 ############################
@@ -61,16 +61,16 @@ x = np.stack([x, np.ones(m)], axis=1)
 # Initiate weight vector
 w = np.array([0,0])
 
-
 ############################
 ##   Gradient Function    ##
 ##  (Sqaured Loss Func)   ##
 ############################
 
 def sq_gradient(x,w,y):
-    
+
     # Valid for sqaure loss only
     # See analytical solution
+    
     sq_grad = x*(np.dot(x,w) - y) 
     
     return sq_grad
@@ -80,24 +80,25 @@ def sq_gradient(x,w,y):
 ##    Gradient Descent    ##
 ############################
 
-def gradient_decent():
-    global itr, w, m, error
+def gradient_decent(x,y,w,acc):
+    global itr, m, error
 
     delta_w = np.array([1,1]) # initialized randomly
 
     itr = 0
-    while all(error < abs(a) for a in delta_w):
+    while all(acc < abs(a) for a in delta_w):
         
         sq_g = 0
 
         # Compute Cumulative gradient
-        for a in range(len(y)):
+        for a in range(m):
 
             # Gradient computation is Normalized by number of data points available
             sq_g = sq_g + sq_gradient(x[a],w,y[a])/m
             a = a+1
         
-        delta_w = alpha * sq_g
+        
+        delta_w = alpha * sq_g 
         # alpha is learning rate
         w = w - (delta_w)
         
@@ -106,9 +107,9 @@ def gradient_decent():
     return w, itr
 
 
-sq_weight, sq_itr = gradient_decent()
+sq_weight, sq_itr = gradient_decent(x,y,w,acc)
 print('The optimized weight vector is {}.'.format(sq_weight))
-print('Solving criteria with Sq Loss Func: Convergency = {} and Learining Rate = {}'.format(error,alpha))
+print('Solving criteria with Sq Loss Func: Convergency = {} and Learining Rate = {}'.format(acc,alpha))
 print('Total iterations done = {}'.format(sq_itr))
 
 
