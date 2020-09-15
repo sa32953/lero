@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 
 # Defining Solving Parameters
 
-alpha = 0.01
-error = 10 ** -4
+alpha = 0.015
+acc = 10 ** -4
 ############################
 ##       Read Data        ##
 ############################
@@ -77,13 +77,13 @@ def ab_gradient(x,w,y):
 ##    Gradient Descent    ##
 ############################
 
-def gradient_decent():
-    global itr, w, m, error
+def gradient_decent(x,y,w,acc):
+    global itr, m, error
 
     delta_w = np.array([1,1]) # initialized randomly
 
     itr = 0
-    while all(error < abs(a) for a in delta_w):
+    while all(acc < abs(a) for a in delta_w):
         
         ab_g = 0
 
@@ -103,9 +103,9 @@ def gradient_decent():
     return w, itr
 
 
-ab_weight, ab_itr = gradient_decent()
+ab_weight, ab_itr = gradient_decent(x,y,w,acc)
 print('The optimized weight vector is {}.'.format(ab_weight))
-print('Solving criteria with Abs Loss Func: Convergency = {} and Learining Rate = {}'.format(error,alpha))
+print('Solving criteria with Abs Loss Func: Convergency = {} and Learining Rate = {}'.format(acc,alpha))
 print('Total iterations done = {}'.format(ab_itr))
 
 
