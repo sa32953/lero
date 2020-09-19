@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 alpha = 1 * 10 ** -1
 acc = 10 ** -5
 
-degree = 2
+
 
 ############################
 ##       Read Data        ##
@@ -47,14 +47,13 @@ m = y_data.size
 ##    Noramalize data     ##
 ############################
 
-# Finding the max and min to normalize the data.
 max_x = max(x_data)
 min_x = min(x_data)
 max_y = max(y_data)
 min_y = min(y_data)
 
 # Each data point in X and Y are normalized as follows
-# New_x = (Old_x - Min_x) / (Max_x - Min_x) 
+# New_x = (Old_x - Min_x) / (Max_x - Min_x)
 
 for f in range(m):
     x_data[f] = (x_data[f] - min_x) / (max_x - min_x)
@@ -71,15 +70,14 @@ plt.figure()
 plt.plot(x_data , y_data ,'ro', ms=10, mec='k')
 plt.ylabel('Normalized Age (in years)')
 plt.xlabel('Normalized Height (in cms)')
-#plt.show()
 
 
 ############################
 ##    Feature Function    ##
 ############################
 
-def feature(x):
-    global degree
+def feature(x,degree):
+    #global degree
     # produces a feature vector with given inputs 
 
     phi_temp = np.array([])
@@ -106,12 +104,12 @@ def hypo(ix,w):
 ##  (Sqaured Loss Func)   ##
 ############################
 
-def sq_gradient(x,w,y):
+def sq_gradient(x,w,y,degree):
     
     # Valid for sqaure loss only
     # See analytical solution
     
-    sq_grad = feature(x)*(hypo(feature(x), w) - y) 
+    sq_grad = feature(x,degree)*(hypo(feature(x,degree), w) - y) 
     
     return sq_grad
 
@@ -120,7 +118,7 @@ def sq_gradient(x,w,y):
 ##    Gradient Descent    ##
 ############################
 
-def gradient_decent(x,y,w,acc):
+def gradient_decent(x,y,w,acc,degree):
     global itr, m
 
     delta_w = np.ones(degree + 1) # initialized randomly
@@ -134,7 +132,7 @@ def gradient_decent(x,y,w,acc):
         for a in range(m):
 
             # Gradient computation is Normalized by number of data points available
-            sq_g = sq_g + sq_gradient(x[a],w,y[a])/m
+            sq_g = sq_g + sq_gradient(x[a], w, y[a], degree)/m
             a = a+1
        
         delta_w = alpha * sq_g 
@@ -147,12 +145,30 @@ def gradient_decent(x,y,w,acc):
     return w, itr
 
 
-weight = np.zeros(degree+1)
+############################
+##     Bunch Solving      ##
+############################
 
-sq_weight, sq_itr = gradient_decent(x_data, y_data, weight, acc)
-print('The optimized weight vector is {}.'.format(sq_weight))
+degree = [ 3, 4, 6, 7, 8 ]
+
+sq_weight = [0] * len(degree)
+sq_itr = [0] * len(degree)
+
+print('Solving.............')
+for b in range(len(degree)):
+
+    weight = np.zeros(degree[b] + 1)
+
+    sq_weight[b], sq_itr[b] = gradient_decent(x_data, y_data, weight, acc, degree[b])
+
+
+print('The weight vectors are optimized for each degree specification.')
+
+# Uncomment the next line to print weight vector of a specific degree. Carefull with indexing.
+#print('The optimized weight vector is {}.'.format(sq_weight[i]))
+
 print('Solving criteria with Sq Loss Func: Convergency = {} and Learining Rate = {}'.format(acc,alpha))
-print('Total iterations done = {}'.format(sq_itr))
+print('Total iterations done = {}. (In same order as degree specification)'.format(sq_itr))
 
 
 ############################
@@ -163,14 +179,20 @@ print('Total iterations done = {}'.format(sq_itr))
 x_data.sort()
 
 # Compute Output based on Learned Weight vector
-new_y = np.array([])
-for every in x_data:
-    new_y = np.append(new_y, [hypo(feature(every), sq_weight)]) 
+new_y = [np.array([])]*len(degree)
 
-#Plot in the same graph
-plt.plot(x_data, new_y, '--')
+for k in range(len(degree)):
+
+    # for each degree
+    for every in x_data:
+        new_y[k] = np.append(new_y[k], [hypo(feature(every,degree[k]), sq_weight[k])]) 
+
+for v in range(len(degree)):
+    # Plot for each degree
+    plt.plot(x_data, new_y[v])
+
+plt.legend(['Training data', 'Degree 3', 'Degree 4', 'Degree 6', 'Degree 7', 'Degree 8'])
 plt.grid(b=None, which='major', axis='both')
-plt.title('Non-Linear Regression with Squared Loss Func')
-plt.legend(['Training data', 'Non - Linear regression'])
+plt.title('Non-Linear Regression with Varible degrees')
 plt.show()
 
