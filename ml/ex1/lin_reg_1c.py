@@ -14,8 +14,9 @@ import matplotlib.pyplot as plt
 
 # Defining Solving Parameters
 
-alpha = 0.015
+alpha = 0.02
 acc = 10 ** -4
+
 ############################
 ##       Read Data        ##
 ############################
@@ -35,6 +36,15 @@ y = np.array([])
 
 for each in data:
     y = np.append(y , [each[1]])
+
+
+## Add some Outliers points
+outlier = [[17.5,0], [18.5,0], [19.5,0]]
+
+for d in range(len(outlier)):
+
+    x = np.append(x , [outlier[d][0]])
+    y = np.append(y , [outlier[d][1]])
 
 ############################
 ##    Visualize Data      ##
@@ -73,6 +83,7 @@ def ab_gradient(x,w,y):
     
     return ab_grad
 
+
 ############################
 ##    Gradient Descent    ##
 ############################
@@ -82,7 +93,9 @@ def gradient_decent(x,y,w,acc):
 
     delta_w = np.array([1,1]) # initialized randomly
 
-    itr = 0
+    itr = 0 # count iterations 
+
+    # While loop until convergency is acheived
     while all(acc < abs(a) for a in delta_w):
         
         ab_g = 0
@@ -109,15 +122,18 @@ print('Solving criteria with Abs Loss Func: Convergency = {} and Learining Rate 
 print('Total iterations done = {}'.format(ab_itr))
 
 
-#In earlier part
-sq_weight = np.array([1.13774908,-3.34547133])
+#If solved with Squared Loss with Outliers, then weight is: 
+sq_weight = np.array([0.7260848  , -0.17531625])
 
 ############################
 ##  Plot Regression Line  ##
 ############################
 
+x[:, 0].sort()
 plt.plot(x[:, 0], np.dot(x, ab_weight), '-')
-plt.plot(x[:, 0], np.dot(x, sq_weight), '.')
+plt.plot(x[:, 0], np.dot(x, sq_weight), '--')
 plt.legend(['Training data', 'Ab_Linear regression', 'Sq_Linear regression'])
+plt.grid(b=None, which='major', axis='both')
+plt.title('Linear Regression with Absolute Loss Func')
 plt.show()
 

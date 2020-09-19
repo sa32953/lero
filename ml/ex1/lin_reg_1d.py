@@ -14,9 +14,7 @@ import matplotlib.pyplot as plt
 
 # Defining Solving Parameters
 
-alpha = 0.005
 acc = 10 ** -4
-
 
 ############################
 ##       Read Data        ##
@@ -43,10 +41,6 @@ for each in data:
 ############################
 
 plt.figure()
-#plt.plot(x,y,'ro', ms=10, mec='k')
-#plt.ylabel('Profit in $10,000')
-#plt.xlabel('Population of City in 10,000s')
-#plt.show()
 
 # Size of data
 m = y.size
@@ -106,6 +100,7 @@ def gradient_decent(x,y,w,acc,alpha):
     
     return w, itr
 
+print('Solving...........')
 alphas = [0.005, 0.0075, 0.01, 0.0125, 0.015, 0.0175, 0.02]
 
 sq_weight = [0] * len(alphas)
@@ -124,6 +119,7 @@ plt.plot(alphas, sq_itr, '-')
 plt.ylabel('Number of Iterations for convergance')
 plt.xlabel('Learning Rate')
 plt.grid(b=None, which='major', axis='both')
-plt.legend(['Convergence Vs Rate'])
+plt.legend(['Convergence Iterations Vs Learning Rate'])
+plt.xticks(np.linspace(0.005, 0.02, 7))
 plt.show()
 

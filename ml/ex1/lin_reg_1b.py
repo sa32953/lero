@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 # Defining Solving Parameters
 
-alpha = 0.005
+alpha = 0.01
 acc = 10 ** -4
 
 
@@ -38,6 +38,10 @@ y = np.array([])
 for each in data:
     y = np.append(y , [each[1]])
 
+# Size of data
+m = y.size
+
+
 ############################
 ##    Visualize Data      ##
 ############################
@@ -47,9 +51,6 @@ plt.plot(x,y,'ro', ms=10, mec='k')
 plt.ylabel('Profit in $10,000')
 plt.xlabel('Population of City in 10,000s')
 #plt.show()
-
-# Size of data
-m = y.size
 
 ############################
 ##      Arrange Data      ##
@@ -119,5 +120,7 @@ print('Total iterations done = {}'.format(sq_itr))
 
 plt.plot(x[:, 0], np.dot(x, sq_weight), '-')
 plt.legend(['Training data', 'Linear regression'])
+plt.grid(b=None, which='major', axis='both')
+plt.title('Linear Regression with Squared Loss Func')
 plt.show()
 
