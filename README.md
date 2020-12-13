@@ -8,6 +8,7 @@
 2. Jupyter Notebooks on Neural Networks
     - Prediction by Forward Propogation
     - Train by Backward Propogation
+    - Gradient by Autograd library
 
 3. Jupyter Notebooks on Support Vector Machine
     - Classify Linear and Non-Linear Datasets
